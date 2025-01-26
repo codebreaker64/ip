@@ -12,7 +12,6 @@ public class Devin {
                 "| |_| |  __/\\ V /| | | | |\n" +
                 "|____/ \\___| \\_/ |_|_| |_|\n";
         System.out.println(logo);
-        System.out.println("____________________________________________________________");
         greet();
         Scanner scan = new Scanner(System.in);
         while (true) {
@@ -44,8 +43,6 @@ public class Devin {
             } else if (texts[0].equals("event")) {
                 texts[0] ="";
                 add('e', String.join(" ", texts));
-            } else {
-                add(' ',text);
             }
         }
     }
