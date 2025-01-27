@@ -1,8 +1,8 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Devin{
-    public static Task[] store = new Task[100];
+    public static ArrayList<Task> store = new ArrayList<>();
     public static int storeIndex = 0;
     public static void main(String[] args) {
 
@@ -34,12 +34,12 @@ public class Devin{
                         throw new DevinException("Please type a choose a task number");
                     }
                     int index = Integer.parseInt((texts[1])) - 1;
-                    if(index > storeIndex|| index < 1) {
+                    if(index > storeIndex + 1|| index < 0) {
                         throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
                     }
-                    store[index].mark();
+                    store.get(index).mark();
                     System.out.println("____________________________________________________________");
-                    System.out.println("Nice! I've marked this task as done:\n " + store[index].toString());
+                    System.out.println("Nice! I've marked this task as done:\n " + store.get(index).toString());
                     System.out.println("____________________________________________________________");
                 } else if (texts[0].equals("unmark")) {
                     if (storeIndex == 0 ) {
@@ -48,12 +48,28 @@ public class Devin{
                         throw new DevinException("Please type a choose a task number");
                     }
                     int index = Integer.parseInt((texts[1])) - 1;
-                    if(index > storeIndex|| index < 1) {
+                    if(index > storeIndex + 1|| index < 0) {
                         throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
                     }
-                    store[index].unmark();
+                    store.get(index).unmark();
                     System.out.println("____________________________________________________________");
-                    System.out.println("OK, I've marked this task as not done yet:\n  " + store[index].toString());
+                    System.out.println("OK, I've marked this task as not done yet:\n  " + store.get(index).toString());
+                    System.out.println("____________________________________________________________");
+                } else if (texts[0].equals("delete")) {
+                    if (storeIndex == 0 ) {
+                        throw new DevinException("There is no task in the list!");
+                    } else if(texts.length != 2) {
+                        throw new DevinException("Please type a choose a task number");
+                    }
+                    int index = Integer.parseInt((texts[1])) - 1;
+                    if(index > storeIndex + 1|| index < 0) {
+                        throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
+                    }
+                    Task temp = store.get(index);
+                    store.remove(index);
+                    storeIndex--;
+                    System.out.println("____________________________________________________________");
+                    System.out.println("Noted. I've removed this task:\n  " +  temp.toString() + "\nNow you have " + storeIndex + " tasks in the list.");
                     System.out.println("____________________________________________________________");
                 } else if (texts[0].equals("todo")) {
                     texts[0] = "";
@@ -96,7 +112,7 @@ public class Devin{
                 if(input.trim().isEmpty()) {
                     throw new DevinException("Oi! The description of a todo cannot be empty");
                 }
-                store[storeIndex] = new ToDo(input.trim());
+                store.add(storeIndex, new ToDo(input.trim()));
                 storeIndex++;
                 break;
             case 'd':
@@ -107,7 +123,7 @@ public class Devin{
                 if(temp.length == 1) {
                     throw new DevinException("My god! please put the /by before the date/time");
                 }
-                store[storeIndex] = new Deadline(temp[0].trim(), temp[1].trim());
+                store.add(storeIndex, new Deadline(temp[0].trim(), temp[1].trim()));
                 storeIndex++;
                 break;
             case 'e':
@@ -122,16 +138,16 @@ public class Devin{
                 if(temp2.length == 1) {
                     throw new DevinException("My god! please put the /to before the date/time");
                 }
-                store[storeIndex] = new Event(temp1[0].trim(), temp2[0].trim(), temp2[1].trim());
+                store.add( storeIndex, new Event(temp1[0].trim(), temp2[0].trim(), temp2[1].trim()));
                 storeIndex++;
                 break;
             default:
-                store[storeIndex] = new Task(input.trim());
+                store.add(storeIndex, new Task(input.trim()));
                 storeIndex++;
                 break;
         }
         System.out.println("____________________________________________________________");
-        System.out.println("Got it. I've added this task:\n  " + store[storeIndex-1].toString() + "\nNow you have " + storeIndex + " tasks in the list.");
+        System.out.println("Got it. I've added this task:\n  " + store.get(storeIndex-1).toString() + "\nNow you have " + storeIndex + " tasks in the list.");
         System.out.println("____________________________________________________________");
     }
 
@@ -139,7 +155,7 @@ public class Devin{
         System.out.println("____________________________________________________________");
         System.out.println("Here are the tasks in your list:");
         for(int i = 0; i < storeIndex; i++){
-            System.out.println(i+1 + ". " + store[i].toString());
+            System.out.println(i+1 + ". " + store.get(i).toString());
         }
         System.out.println("____________________________________________________________");
     }
