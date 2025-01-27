@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Devin {
+public class Devin{
     public static Task[] store = new Task[100];
     public static int storeIndex = 0;
     public static void main(String[] args) {
@@ -16,33 +16,57 @@ public class Devin {
         Scanner scan = new Scanner(System.in);
         while (true) {
             String text = scan.nextLine();
-            String[] texts = text.split(" ");
-            if(text.equals("bye")) {
-                exit();
-                break;
-            } else if (text.equals("list")) {
-                list();
-            } else if (texts[0].equals("mark")) {
-                int index = Integer.parseInt((texts[1])) - 1;
-                store[index].mark();
-                System.out.println("____________________________________________________________");
-                System.out.println("Nice! I've marked this task as done:\n " + store[index].toString());
-                System.out.println("____________________________________________________________");
-            } else if (texts[0].equals("unmark")) {
-                int index = Integer.parseInt((texts[1])) - 1;
-                store[index].unmark();
-                System.out.println("____________________________________________________________");
-                System.out.println("OK, I've marked this task as not done yet:\n  " + store[index].toString());
-                System.out.println("____________________________________________________________");
-            } else if (texts[0].equals("todo")) {
-                texts[0] ="";
-                add('t', String.join(" ", texts));
-            } else if (texts[0].equals("deadline")) {
-                texts[0] ="";
-                add('d',String.join(" ", texts));
-            } else if (texts[0].equals("event")) {
-                texts[0] ="";
-                add('e', String.join(" ", texts));
+            try {
+                if(text.trim().isEmpty()) {
+                    throw new DevinException("Please type a valid command");
+                }
+                String[] texts = text.split(" ");
+                if (text.equals("bye")) {
+                    exit();
+                    break;
+                } else if (text.equals("list")) {
+                    list();
+                } else if (texts[0].equals("mark")) {
+
+                    if (storeIndex == 0 ) {
+                        throw new DevinException("There is no task in the list!");
+                    } else if(texts.length != 2) {
+                        throw new DevinException("Please type a choose a task number");
+                    }
+                    int index = Integer.parseInt((texts[1])) - 1;
+                    if(index > storeIndex|| index < 1) {
+                        throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
+                    }
+                    store[index].mark();
+                    System.out.println("____________________________________________________________");
+                    System.out.println("Nice! I've marked this task as done:\n " + store[index].toString());
+                    System.out.println("____________________________________________________________");
+                } else if (texts[0].equals("unmark")) {
+                    if (storeIndex == 0 ) {
+                        throw new DevinException("There is no task in the list!");
+                    } else if(texts.length != 2) {
+                        throw new DevinException("Please type a choose a task number");
+                    }
+                    int index = Integer.parseInt((texts[1])) - 1;
+                    if(index > storeIndex|| index < 1) {
+                        throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
+                    }
+                    store[index].unmark();
+                    System.out.println("____________________________________________________________");
+                    System.out.println("OK, I've marked this task as not done yet:\n  " + store[index].toString());
+                    System.out.println("____________________________________________________________");
+                } else if (texts[0].equals("todo")) {
+                    texts[0] = "";
+                    add('t', String.join(" ", texts));
+                } else if (texts[0].equals("deadline")) {
+                    texts[0] = "";
+                    add('d', String.join(" ", texts));
+                } else if (texts[0].equals("event")) {
+                    texts[0] = "";
+                    add('e', String.join(" ", texts));
+                }
+            } catch (DevinException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -66,20 +90,38 @@ public class Devin {
         System.out.println("____________________________________________________________");
     }
 
-    public static void add(char type, String input) {
+    public static void add(char type, String input) throws DevinException {
         switch(type) {
             case 't':
+                if(input.trim().isEmpty()) {
+                    throw new DevinException("Oi! The description of a todo cannot be empty");
+                }
                 store[storeIndex] = new ToDo(input.trim());
                 storeIndex++;
                 break;
             case 'd':
+                if(input.trim().isEmpty()) {
+                    throw new DevinException("Oi! The description of a deadline cannot be empty");
+                }
                 String[] temp = input.split("/by");
+                if(temp.length == 1) {
+                    throw new DevinException("My god! please put the /by before the date/time");
+                }
                 store[storeIndex] = new Deadline(temp[0].trim(), temp[1].trim());
                 storeIndex++;
                 break;
             case 'e':
+                if(input.trim().isEmpty()) {
+                    throw new DevinException("Oi! The description of a event cannot be empty");
+                }
                 String[] temp1 = input.split("/from");
+                if(temp1.length == 1) {
+                    throw new DevinException("My god! please put the /from before the date/time");
+                }
                 String[] temp2 = temp1[1].split("/to");
+                if(temp2.length == 1) {
+                    throw new DevinException("My god! please put the /to before the date/time");
+                }
                 store[storeIndex] = new Event(temp1[0].trim(), temp2[0].trim(), temp2[1].trim());
                 storeIndex++;
                 break;
@@ -102,6 +144,13 @@ public class Devin {
         System.out.println("____________________________________________________________");
     }
 
+}
+
+//Inspired by https://www.geeksforgeeks.org/user-defined-custom-exception-in-java/
+class DevinException extends Exception {
+    public DevinException(String message) {
+        super(message);
+    }
 }
 
 class Task {
