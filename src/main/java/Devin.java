@@ -4,6 +4,13 @@ import java.util.Scanner;
 public class Devin{
     public static ArrayList<Task> store = new ArrayList<>();
     public static int storeIndex = 0;
+
+    enum Type {
+        todo,
+        deadline,
+        event
+    }
+
     public static void main(String[] args) {
 
         String logo = " ____             _\n" +
@@ -73,13 +80,13 @@ public class Devin{
                     System.out.println("____________________________________________________________");
                 } else if (texts[0].equals("todo")) {
                     texts[0] = "";
-                    add('t', String.join(" ", texts));
+                    add(Type.todo, String.join(" ", texts));
                 } else if (texts[0].equals("deadline")) {
                     texts[0] = "";
-                    add('d', String.join(" ", texts));
+                    add(Type.deadline, String.join(" ", texts));
                 } else if (texts[0].equals("event")) {
                     texts[0] = "";
-                    add('e', String.join(" ", texts));
+                    add(Type.event, String.join(" ", texts));
                 }
             } catch (DevinException e) {
                 System.out.println(e.getMessage());
@@ -106,16 +113,16 @@ public class Devin{
         System.out.println("____________________________________________________________");
     }
 
-    public static void add(char type, String input) throws DevinException {
+    public static void add(Type type, String input) throws DevinException {
         switch(type) {
-            case 't':
+            case todo:
                 if(input.trim().isEmpty()) {
                     throw new DevinException("Oi! The description of a todo cannot be empty");
                 }
                 store.add(storeIndex, new ToDo(input.trim()));
                 storeIndex++;
                 break;
-            case 'd':
+            case deadline:
                 if(input.trim().isEmpty()) {
                     throw new DevinException("Oi! The description of a deadline cannot be empty");
                 }
@@ -126,7 +133,7 @@ public class Devin{
                 store.add(storeIndex, new Deadline(temp[0].trim(), temp[1].trim()));
                 storeIndex++;
                 break;
-            case 'e':
+            case event:
                 if(input.trim().isEmpty()) {
                     throw new DevinException("Oi! The description of a event cannot be empty");
                 }
