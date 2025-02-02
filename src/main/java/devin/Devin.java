@@ -1,3 +1,5 @@
+package devin;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.nio.file.*;
@@ -5,7 +7,7 @@ import java.io.*;
 import java.time.*;
 import java.time.format.*;
 
-public class Devin {
+class Devin {
 
     public static Path filePath = Paths.get("src/main/java/data/devin.txt");
 
@@ -103,108 +105,13 @@ public class Devin {
             }
         }
     }
+
 }
 
 //Inspired by https://www.geeksforgeeks.org/user-defined-custom-exception-in-java/
 class DevinException extends Exception {
     public DevinException(String message) {
         super(message);
-    }
-}
-
-class Task {
-    protected String name;
-    protected boolean isDone;
-
-    public Task(String name, boolean isDone) {
-        this.name = name;
-        this.isDone = isDone;
-    }
-
-    public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void mark() {
-        this.isDone = true;
-    }
-
-    public void unmark() {
-        this.isDone = false;
-    }
-
-    public String toFileString() {
-        return getStatusIcon() + " | " + this.name;
-    }
-
-    @Override
-    public String toString() {
-        return "[" + getStatusIcon() + "] " + this.name;
-    }
-}
-
-class Deadline extends Task {
-    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    protected LocalDateTime by;
-
-    public Deadline(String description, LocalDateTime by, boolean isDone) {
-        super(description, isDone);
-        this.by = by;
-    }
-
-    @Override
-    public String toFileString() {
-        return "D | "+ super.toFileString() + " | " + by.format(formatter1);
-    }
-
-    @Override
-    public String toString() {
-        return "[D]" + super.toString() + " (by: " + by.format(formatter2) + ")";
-    }
-}
-
-class ToDo extends Task {
-
-    public ToDo(String description, boolean isDone) {
-        super(description, isDone);
-    }
-
-    @Override
-    public String toFileString() {
-        return "T | "+ super.toFileString();
-    }
-
-    @Override
-    public String toString() {
-        return "[T]" + super.toString();
-    }
-}
-
-class Event extends Task {
-    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    protected LocalDateTime from;
-    protected LocalDateTime to;
-
-    public Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
-        super(description, isDone);
-        this.from = from;
-        this.to = to;
-    }
-
-    @Override
-    public String toFileString() {
-        return "E | "+ super.toFileString() + " | " + from.format(formatter1) + " | " + to.format(formatter1);
-    }
-
-    @Override
-    public String toString() {
-        return "[E]" + super.toString() + " (from: " + from.format(formatter2) + " to: " + to.format(formatter2) + ")";
     }
 }
 
@@ -332,7 +239,7 @@ class Parser{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
         return LocalDateTime.parse(input, formatter);
     }
-    public static String[] parseInput(Devin.Type type, String input) throws DevinException {
+    public static String[] parseInput(devin.Devin.Type type, String input) throws DevinException {
         if (input.trim().isEmpty()) {
             throw new DevinException("Oi! The description of a" + type + " cannot be empty");
         }
@@ -369,13 +276,110 @@ class Parser{
     }
 }
 
-class Tasklist{
+class Task {
+    protected String name;
+    protected boolean isDone;
+
+    public Task(String name, boolean isDone) {
+        this.name = name;
+        this.isDone = isDone;
+    }
+
+    public String getStatusIcon() {
+        return (isDone ? "X" : " "); // mark done task with X
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void mark() {
+        this.isDone = true;
+    }
+
+    public void unmark() {
+        this.isDone = false;
+    }
+
+    public String toFileString() {
+        return getStatusIcon() + " | " + this.name;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + this.name;
+    }
+}
+
+class ToDo extends Task {
+
+    public ToDo(String description, boolean isDone) {
+        super(description, isDone);
+    }
+
+    @Override
+    public String toFileString() {
+        return "T | " + super.toFileString();
+    }
+
+    @Override
+    public String toString() {
+        return "[T]" + super.toString();
+    }
+}
+
+class Deadline extends Task {
+    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    protected LocalDateTime by;
+
+    public Deadline(String description, LocalDateTime by, boolean isDone) {
+        super(description, isDone);
+        this.by = by;
+    }
+
+    @Override
+    public String toFileString() {
+        return "D | " + super.toFileString() + " | " + by.format(formatter1);
+    }
+
+    @Override
+    public String toString() {
+        return "[D]" + super.toString() + " (by: " + by.format(formatter2) + ")";
+    }
+}
+
+class Event extends Task {
+    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    protected LocalDateTime from;
+    protected LocalDateTime to;
+
+    public Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
+        super(description, isDone);
+        this.from = from;
+        this.to = to;
+    }
+
+    @Override
+    public String toFileString() {
+        return "E | " + super.toFileString() + " | " + from.format(formatter1) + " | " + to.format(formatter1);
+    }
+
+    @Override
+    public String toString() {
+        return "[E]" + super.toString() + " (from: " + from.format(formatter2) + " to: " + to.format(formatter2) + ")";
+    }
+}
+
+class Tasklist {
 
     public ArrayList<Task> store;
 
     public Tasklist(ArrayList<Task> store) {
         this.store = store;
     }
+
     public void add(Devin.Type type, String input, Storage storage) throws DevinException {
         Task task;
         String[] temp = null;
@@ -396,7 +400,7 @@ class Tasklist{
                     storage.append(task.toFileString());
                     break;
                 case event:
-                    temp = Parser.parseInput(type,input);
+                    temp = Parser.parseInput(type, input);
                     task = new Event(temp[0].trim(), Parser.parseDate(temp[1].trim()), Parser.parseDate(temp[2].trim()), false);
                     store.add(task);
                     storage.append(task.toFileString());
@@ -420,7 +424,7 @@ class Tasklist{
         store.get(index).mark();
     }
 
-    public  void handleUnmark(int index) {
+    public void handleUnmark(int index) {
         store.get(index).unmark();
     }
 
@@ -428,3 +432,4 @@ class Tasklist{
         store.remove(index);
     }
 }
+
