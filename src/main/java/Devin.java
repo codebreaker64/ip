@@ -2,13 +2,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.nio.file.*;
 import java.io.*;
+import java.time.*;
+import java.time.format.*;
 
-public class Devin{
+public class Devin {
     public static ArrayList<Task> store = new ArrayList<>();
     public static int storeIndex = 0;
 
     public static Path filePath = Paths.get("src/main/java/data/devin.txt");
     public static Path parentDir = filePath.getParent();
+
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
     enum Type {
         todo,
@@ -24,22 +28,22 @@ public class Devin{
             } else if (!Files.exists(filePath)) {
                 throw new DevinException("devin.txt does not exist.");
             }
-            BufferedReader reader = new BufferedReader( new FileReader(filePath.toString()));
+            BufferedReader reader = new BufferedReader(new FileReader(filePath.toString()));
             String line;
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 String[] input = line.split(" \\| ");
-                if(input[0].equals("T")) {
+                if (input[0].equals("T")) {
                     store.add(storeIndex, new ToDo(input[2], input[1].equals("X")));
                     storeIndex++;
-                } else if(input[0].equals("D")) {
-                    store.add(storeIndex, new Deadline(input[2], input[3],input[1].equals("X")));
+                } else if (input[0].equals("D")) {
+                    store.add(storeIndex, new Deadline(input[2], LocalDateTime.parse(input[3], formatter), input[1].equals("X")));
                     storeIndex++;
-                } else if(input[0].equals("E")) {
-                    store.add(storeIndex, new Event(input[2], input[3], input[4], input[1].equals("X")));
+                } else if (input[0].equals("E")) {
+                    store.add(storeIndex, new Event(input[2], LocalDateTime.parse(input[3], formatter), LocalDateTime.parse(input[4], formatter), input[1].equals("X")));
                     storeIndex++;
                 }
             }
-        } catch(DevinException e) {
+        } catch (DevinException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
@@ -56,7 +60,7 @@ public class Devin{
         while (true) {
             String text = scan.nextLine();
             try {
-                if(text.trim().isEmpty()) {
+                if (text.trim().isEmpty()) {
                     throw new DevinException("Please type a valid command");
                 }
                 String[] texts = text.split(" ");
@@ -67,18 +71,18 @@ public class Devin{
                     list();
                 } else if (texts[0].equals("mark")) {
 
-                    if (storeIndex == 0 ) {
+                    if (storeIndex == 0) {
                         throw new DevinException("There is no task in the list!");
-                    } else if(texts.length != 2) {
+                    } else if (texts.length != 2) {
                         throw new DevinException("Please choose a task number");
                     }
                     int index = Integer.parseInt((texts[1])) - 1;
-                    if(index > storeIndex + 1|| index < 0) {
+                    if (index > storeIndex + 1 || index < 0) {
                         throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
                     }
                     store.get(index).mark();
                     FileWriter writer = new FileWriter(filePath.toString());
-                    for(Task task : store) {
+                    for (Task task : store) {
                         writer.write(task.toFileString() + "\n");
                     }
                     writer.close();
@@ -86,18 +90,18 @@ public class Devin{
                     System.out.println("Nice! I've marked this task as done:\n " + store.get(index).toString());
                     System.out.println("____________________________________________________________");
                 } else if (texts[0].equals("unmark")) {
-                    if (storeIndex == 0 ) {
+                    if (storeIndex == 0) {
                         throw new DevinException("There is no task in the list!");
-                    } else if(texts.length != 2) {
+                    } else if (texts.length != 2) {
                         throw new DevinException("Please type a choose a task number");
                     }
                     int index = Integer.parseInt((texts[1])) - 1;
-                    if(index > storeIndex + 1|| index < 0) {
+                    if (index > storeIndex + 1 || index < 0) {
                         throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
                     }
                     store.get(index).unmark();
                     FileWriter writer = new FileWriter(filePath.toString());
-                    for(Task task : store) {
+                    for (Task task : store) {
                         writer.write(task.toFileString() + "\n");
                     }
                     writer.close();
@@ -105,13 +109,13 @@ public class Devin{
                     System.out.println("OK, I've marked this task as not done yet:\n  " + store.get(index).toString());
                     System.out.println("____________________________________________________________");
                 } else if (texts[0].equals("delete")) {
-                    if (storeIndex == 0 ) {
+                    if (storeIndex == 0) {
                         throw new DevinException("There is no task in the list!");
-                    } else if(texts.length != 2) {
+                    } else if (texts.length != 2) {
                         throw new DevinException("Please type a choose a task number");
                     }
                     int index = Integer.parseInt((texts[1])) - 1;
-                    if(index > storeIndex + 1|| index < 0) {
+                    if (index > storeIndex + 1 || index < 0) {
                         throw new DevinException("Please choose a valid task number from 1 to " + storeIndex);
                     }
                     Task temp = store.get(index);
@@ -119,12 +123,12 @@ public class Devin{
                     storeIndex--;
 
                     FileWriter writer = new FileWriter(filePath.toString());
-                    for(Task task : store) {
+                    for (Task task : store) {
                         writer.write(task.toFileString() + "\n");
                     }
                     writer.close();
                     System.out.println("____________________________________________________________");
-                    System.out.println("Noted. I've removed this task:\n  " +  temp.toString() + "\nNow you have " + storeIndex + " tasks in the list.");
+                    System.out.println("Noted. I've removed this task:\n  " + temp.toString() + "\nNow you have " + storeIndex + " tasks in the list.");
                     System.out.println("____________________________________________________________");
                 } else if (texts[0].equals("todo")) {
                     texts[0] = "";
@@ -166,9 +170,9 @@ public class Devin{
     public static void add(Type type, String input) throws DevinException {
         Task task;
         try (FileWriter writer = new FileWriter(filePath.toString(), true)) { // Overwrites the file
-            switch(type) {
+            switch (type) {
                 case todo:
-                    if(input.trim().isEmpty()) {
+                    if (input.trim().isEmpty()) {
                         throw new DevinException("Oi! The description of a todo cannot be empty");
                     }
                     task = new ToDo(input.trim(), false);
@@ -177,32 +181,38 @@ public class Devin{
                     writer.write(task.toFileString() + "\n");
                     break;
                 case deadline:
-                    if(input.trim().isEmpty()) {
+                    if (input.trim().isEmpty()) {
                         throw new DevinException("Oi! The description of a deadline cannot be empty");
                     }
                     String[] temp = input.split("/by");
-                    if(temp.length == 1) {
+                    if (temp.length == 1) {
                         throw new DevinException("My god! please put the /by before the date/time");
                     }
-                    task = new Deadline(temp[0].trim(), temp[1].trim(), false);
+                    if(!isValidDate(temp[1].trim())) {
+                        throw new DevinException("Date time format is incorrect. Please type in this format (d/M/yyyy HHmm)");
+                    }
+                    task = new Deadline(temp[0].trim(), LocalDateTime.parse(temp[1].trim(), formatter), false);
                     store.add(storeIndex, task);
                     storeIndex++;
                     writer.write(task.toFileString() + "\n");
                     break;
                 case event:
-                    if(input.trim().isEmpty()) {
+                    if (input.trim().isEmpty()) {
                         throw new DevinException("Oi! The description of a event cannot be empty");
                     }
                     String[] temp1 = input.split("/from");
-                    if(temp1.length == 1) {
+                    if (temp1.length == 1) {
                         throw new DevinException("My god! please put the /from before the date/time");
                     }
                     String[] temp2 = temp1[1].split("/to");
-                    if(temp2.length == 1) {
+                    if (temp2.length == 1) {
                         throw new DevinException("My god! please put the /to before the date/time");
                     }
-                    task = new Event(temp1[0].trim(), temp2[0].trim(), temp2[1].trim(), false);
-                    store.add( storeIndex, task);
+                    if(!isValidDate(temp2[0].trim()) && !isValidDate(temp2[1].trim())) {
+                        throw new DevinException("Date time format is incorrect. Please type in this format (d/M/yyyy HHmm)");
+                    }
+                    task = new Event(temp1[0].trim(), LocalDateTime.parse(temp2[0].trim(), formatter), LocalDateTime.parse(temp2[1].trim(), formatter), false);
+                    store.add(storeIndex, task);
                     storeIndex++;
                     writer.write(task.toFileString() + "\n");
                     break;
@@ -215,19 +225,29 @@ public class Devin{
             System.out.println("Error writing to file: " + e.getMessage());
         }
         System.out.println("____________________________________________________________");
-        System.out.println("Got it. I've added this task:\n  " + store.get(storeIndex-1).toString() + "\nNow you have " + storeIndex + " tasks in the list.");
+        System.out.println("Got it. I've added this task:\n  " + store.get(storeIndex - 1).toString() + "\nNow you have " + storeIndex + " tasks in the list.");
         System.out.println("____________________________________________________________");
     }
 
     public static void list() {
         System.out.println("____________________________________________________________");
         System.out.println("Here are the tasks in your list:");
-        for(int i = 0; i < storeIndex; i++){
-            System.out.println(i+1 + ". " + store.get(i).toString());
+        for (int i = 0; i < storeIndex; i++) {
+            System.out.println(i + 1 + ". " + store.get(i).toString());
         }
         System.out.println("____________________________________________________________");
     }
 
+    public static boolean isValidDate(String dateString) {
+        try {
+            LocalDateTime.parse(dateString, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+
+
+        }
+    }
 }
 
 //Inspired by https://www.geeksforgeeks.org/user-defined-custom-exception-in-java/
@@ -273,22 +293,23 @@ class Task {
 }
 
 class Deadline extends Task {
+    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    protected LocalDateTime by;
 
-    protected String by;
-
-    public Deadline(String description, String by, boolean isDone) {
+    public Deadline(String description, LocalDateTime by, boolean isDone) {
         super(description, isDone);
         this.by = by;
     }
 
     @Override
     public String toFileString() {
-        return "D | "+ super.toFileString() + " | " + by;
+        return "D | "+ super.toFileString() + " | " + by.format(formatter1);
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString() + " (by: " + by.format(formatter2) + ")";
     }
 }
 
@@ -310,11 +331,12 @@ class ToDo extends Task {
 }
 
 class Event extends Task {
+    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
-    protected String from;
-    protected String to;
-
-    public Event(String description, String from, String to, boolean isDone) {
+    public Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
         super(description, isDone);
         this.from = from;
         this.to = to;
@@ -322,11 +344,11 @@ class Event extends Task {
 
     @Override
     public String toFileString() {
-        return "E | "+ super.toFileString() + " | " + from + " | " + to;
+        return "E | "+ super.toFileString() + " | " + from.format(formatter1) + " | " + to.format(formatter1);
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return "[E]" + super.toString() + " (from: " + from.format(formatter2) + " to: " + to.format(formatter2) + ")";
     }
 }
