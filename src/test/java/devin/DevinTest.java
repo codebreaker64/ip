@@ -27,9 +27,9 @@ public class DevinTest {
         String task2 = "Task2";
         String task3 = "Task3";
 
-        storage.append(task1);
-        storage.append(task2);
-        storage.append(task3);
+        storage.appendTask(task1);
+        storage.appendTask(task2);
+        storage.appendTask(task3);
 
         String fileContent = Files.readString(tempFile);
         assertTrue(fileContent.contains(task1), "Task1 was not appended successfully");
