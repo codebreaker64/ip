@@ -7,6 +7,10 @@ import java.nio.file.*;
 import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
+import devin.exception.DevinException;
+import devin.parser.Parser;
+import devin.storage.Storage;
+
 public class DevinTest {
     private Storage storage;
 
