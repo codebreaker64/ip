@@ -1,5 +1,8 @@
 package devin.task;
 
+/**
+ * Representation of a to-do task.
+ */
 public class ToDo extends Task {
 
     /**

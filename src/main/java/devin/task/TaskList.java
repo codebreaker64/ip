@@ -1,5 +1,6 @@
 package devin.task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,8 +10,11 @@ import devin.exception.DevinException;
 import devin.parser.Parser;
 import devin.storage.Storage;
 
+/**
+ * Representation of a task list.
+ */
 public class TaskList {
-    public ArrayList<Task> tasks;
+    private ArrayList<Task> tasks;
 
     /**
      * Constructs a new instance of Tasklist with the specified store.
@@ -29,52 +33,46 @@ public class TaskList {
      * @param storage instance of Storage object.
      * @throws DevinException if the todo description is empty.
      */
-    public void addTask(Devin.Type type, String input, Storage storage) throws DevinException {
+    public void addTask(Devin.Type type, String input, Storage storage) throws DevinException, IOException {
         Task task;
         String[] temp = null;
-
-        try {
-            switch (type) {
-            case todo:
-                if (input.trim().isEmpty()) {
-                    throw new DevinException("Oi! The description of a todo cannot be empty");
-                }
-                task = new ToDo(input.trim(), false);
-                tasks.add(task);
-                storage.appendTask(task.toFileString());
-                break;
-            case deadline:
-                temp = Parser.parseInput(type, input);
-                task = new Deadline(temp[0].trim(), Parser.parseDate(temp[1].trim()), false);
-                tasks.add(task);
-                storage.appendTask(task.toFileString());
-                break;
-            case event:
-                temp = Parser.parseInput(type, input);
-                task = new Event(temp[0].trim(), Parser.parseDate(temp[1].trim()),
-                        Parser.parseDate(temp[2].trim()), false);
-                tasks.add(task);
-                storage.appendTask(task.toFileString());
-                break;
-            default:
-                throw new DevinException("Invalid task type");
-                //Fallthrough
+        switch (type) {
+        case todo:
+            if (input.trim().isEmpty()) {
+                throw new DevinException("Oi! The description of a todo cannot be empty");
             }
-        } catch (DevinException e) {
-            throw new DevinException(e.getMessage());
+            task = new ToDo(input.trim(), false);
+            tasks.add(task);
+            storage.appendTask(task.toFileString());
+            break;
+        case deadline:
+            temp = Parser.parseInput(type, input);
+            task = new Deadline(temp[0].trim(), Parser.parseDate(temp[1].trim()), false);
+            tasks.add(task);
+            storage.appendTask(task.toFileString());
+            break;
+        case event:
+            temp = Parser.parseInput(type, input);
+            task = new Event(temp[0].trim(), Parser.parseDate(temp[1].trim()),
+                    Parser.parseDate(temp[2].trim()), false);
+            tasks.add(task);
+            storage.appendTask(task.toFileString());
+            break;
+        default:
+            throw new DevinException("Invalid task type");
+            //Fallthrough
         }
     }
 
     /**
      * Lists out all the tasks currently in the task list.
      */
-    public void listTasks() {
-        System.out.println("____________________________________________________________");
-        System.out.println("Here are the tasks in your list:");
+    public String listTasks() {
+        StringBuilder out = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(i + 1 + ". " + tasks.get(i).toString());
+            out.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
         }
-        System.out.println("____________________________________________________________");
+        return out.toString();
     }
 
     /**
@@ -109,9 +107,8 @@ public class TaskList {
      *
      * @param keyword keyword to filter the task list.
      */
-    public void findTask(String keyword) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Here are the matching tasks in your listTasks:");
+    public String findTask(String keyword) {
+        StringBuilder out = new StringBuilder("Here are the matching tasks in your listTasks:");
         int i = 1;
         for (Task task : tasks) {
             String taskName = task.name.toLowerCase();
@@ -123,10 +120,19 @@ public class TaskList {
             Matcher matcher = pattern.matcher(taskName);
 
             if (matcher.find()) {
-                System.out.println(i + "." + task.toString());
+                out.append(i).append(".").append(task.toString()).append("\n");
                 i++;
             }
         }
-        System.out.println("____________________________________________________________");
+        return out.toString();
+    }
+
+    /**
+     * Get the task list.
+     *
+     * @return tasklist
+     */
+    public ArrayList<Task> getTasks() {
+        return tasks;
     }
 }

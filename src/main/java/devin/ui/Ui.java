@@ -1,30 +1,22 @@
 package devin.ui;
 
+/**
+ * Representation of a ui.
+ */
 public class Ui {
 
     /**
      * Prints the greeting message.
      */
-    public static void printGreet() {
-        String logo = " ____             _\n" +
-                "|  _ \\  _____   _(_)_ __\n" +
-                "| | | |/ _ \\ \\ / / | '_ \\\n" +
-                "| |_| |  __/\\ V /| | | | |\n" +
-                "|____/ \\___| \\_/ |_|_| |_|\n";
-        System.out.println(logo);
-        System.out.println("____________________________________________________________");
-        System.out.println("Hello! I'm, Devin");
-        System.out.println("What can I do for you?");
-        System.out.println("____________________________________________________________");
+    public static String printGreet() {
+        return "Hello! I'm, Devin\nWhat can I do for you?";
     }
 
     /**
      * Prints the exit message.
      */
-    public static void printExit() {
-        System.out.println("____________________________________________________________");
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println("____________________________________________________________");
+    public static String printExit() {
+        return "Bye. Hope to see you again soon!";
     }
 
     /**
@@ -32,10 +24,8 @@ public class Ui {
      *
      * @param input user input text.
      */
-    public static void printEcho(String input) {
-        System.out.println("____________________________________________________________");
-        System.out.println(input);
-        System.out.println("____________________________________________________________");
+    public static String printEcho(String input) {
+        return input;
     }
 
     /**
@@ -43,10 +33,8 @@ public class Ui {
      *
      * @param taskName task description.
      */
-    public static void printMark(String taskName) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Nice! I've marked this task as done:\n " + taskName);
-        System.out.println("____________________________________________________________");
+    public static String printMark(String taskName) {
+        return "Nice! I've marked this task as done:\n " + taskName;
     }
 
     /**
@@ -54,10 +42,8 @@ public class Ui {
      *
      * @param taskName task description.
      */
-    public static void printUnmark(String taskName) {
-        System.out.println("____________________________________________________________");
-        System.out.println("OK, I've marked this task as not done yet:\n  " + taskName);
-        System.out.println("____________________________________________________________");
+    public static String printUnmark(String taskName) {
+        return "OK, I've marked this task as not done yet:\n  " + taskName;
     }
 
     /**
@@ -66,11 +52,8 @@ public class Ui {
      * @param temp task detail.
      * @param size task list size.
      */
-    public static void printDelete(String temp, int size) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Noted. I've removed this task:\n  " + temp
-                + "\nNow you have " + size + " tasks in the list.");
-        System.out.println("____________________________________________________________");
+    public static String printDelete(String temp, int size) {
+        return "Noted. I've removed this task:\n  " + temp + "\nNow you have " + size + " tasks in the list.";
     }
 
     /**
@@ -79,11 +62,8 @@ public class Ui {
      * @param taskName task description.
      * @param size     task list size.
      */
-    public static void printAdd(String taskName, int size) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Got it. I've added this task:\n  " + taskName
-                + "\nNow you have " + size + " tasks in the list.");
-        System.out.println("____________________________________________________________");
+    public static String printAdd(String taskName, int size) {
+        return "Got it. I've added this task:\n  " + taskName + "\nNow you have " + size + " tasks in the list.";
     }
 
 }

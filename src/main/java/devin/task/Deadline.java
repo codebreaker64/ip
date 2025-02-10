@@ -3,9 +3,12 @@ package devin.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Representation of a deadline task.
+ */
 public class Deadline extends Task {
-    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter FORMATTER2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     protected LocalDateTime by;
 
@@ -23,11 +26,11 @@ public class Deadline extends Task {
 
     @Override
     public String toFileString() {
-        return "D | " + super.toFileString() + " | " + by.format(formatter1);
+        return "D | " + super.toFileString() + " | " + by.format(FORMATTER1);
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by.format(formatter2) + ")";
+        return "[D]" + super.toString() + " (by: " + by.format(FORMATTER2) + ")";
     }
 }

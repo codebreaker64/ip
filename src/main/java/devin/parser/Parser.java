@@ -7,6 +7,9 @@ import java.time.format.DateTimeParseException;
 import devin.Devin;
 import devin.exception.DevinException;
 
+/**
+ * Representation of a parser.
+ */
 public class Parser {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
@@ -44,14 +47,14 @@ public class Parser {
      */
     public static String[] parseInput(devin.Devin.Type type, String input) throws DevinException {
         if (input.trim().isEmpty()) {
-            throw new DevinException("Oi! The description of a" + type + " cannot be empty");
+            throw new DevinException("Oi! The description of a " + type + " cannot be empty");
         }
         String[] temps = null;
         if (type == Devin.Type.deadline) {
             if (!input.contains("/by")) {
                 throw new DevinException("My god! please follow this format deadline task /by d/m/yyyy HHmm");
             }
-            temps = input.split("/by");
+            temps = input.trim().split("/by");
             if (!isValidDate(temps[1].trim())) {
                 throw new DevinException("Date time format is incorrect. Please type in this format (d/M/yyyy HHmm)");
             }
@@ -61,7 +64,7 @@ public class Parser {
                         "My god! please follow this format event task /from d/m/yyyy HHmm /to d/m/yyyy HHmm");
             }
             temps = input.split("/from | /to");
-            if (!isValidDate(temps[1].trim()) && !isValidDate(temps[2].trim())) {
+            if (!isValidDate(temps[1].trim()) || !isValidDate(temps[2].trim())) {
                 throw new DevinException("Date time format is incorrect. Please type in this format (d/M/yyyy HHmm)");
             }
         }

@@ -3,9 +3,12 @@ package devin.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Representation of an event task.
+ */
 public class Event extends Task {
-    public static DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    public static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER1 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter FORMATTER2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     protected LocalDateTime from;
     protected LocalDateTime to;
@@ -26,11 +29,11 @@ public class Event extends Task {
 
     @Override
     public String toFileString() {
-        return "E | " + super.toFileString() + " | " + from.format(formatter1) + " | " + to.format(formatter1);
+        return "E | " + super.toFileString() + " | " + from.format(FORMATTER1) + " | " + to.format(FORMATTER1);
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from.format(formatter2) + " to: " + to.format(formatter2) + ")";
+        return "[E]" + super.toString() + " (from: " + from.format(FORMATTER2) + " to: " + to.format(FORMATTER2) + ")";
     }
 }
