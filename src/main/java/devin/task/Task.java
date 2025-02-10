@@ -1,5 +1,8 @@
 package devin.task;
 
+/**
+ * Representation of a Task.
+ */
 public class Task {
     protected String name;
     protected boolean isDone;

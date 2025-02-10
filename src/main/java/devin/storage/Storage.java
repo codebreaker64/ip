@@ -8,16 +8,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import devin.exception.DevinException;
+import devin.parser.Parser;
 import devin.task.Deadline;
 import devin.task.Event;
 import devin.task.Task;
 import devin.task.ToDo;
-import devin.exception.DevinException;
-import devin.parser.Parser;
 
+/**
+ * Representation of a data storage.
+ */
 public class Storage {
-    public Path parentDir;
-    public Path filePath;
+    private Path parentDir;
+    private Path filePath;
 
     /**
      * Constructs a new instance of Storage with the specified file path.
@@ -35,32 +38,25 @@ public class Storage {
      *
      * @return task list.
      */
-    public ArrayList<Task> retrieveTasks() {
+    public ArrayList<Task> retrieveTasks() throws DevinException, IOException {
         ArrayList<Task> tasks = new ArrayList<>();
-
-        try {
-            if (!Files.exists(parentDir)) {
-                throw new DevinException("Data folder does not exist.");
-            } else if (!Files.exists(filePath)) {
-                throw new DevinException("devin.txt does not exist.");
+        if (!Files.exists(parentDir)) {
+            throw new DevinException("Data folder does not exist.");
+        } else if (!Files.exists(filePath)) {
+            throw new DevinException("devin.txt does not exist.");
+        }
+        BufferedReader reader = new BufferedReader(new FileReader(filePath.toString()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] inputs = line.split(" \\| ");
+            if (inputs[0].equals("T")) {
+                tasks.add(new ToDo(inputs[2], inputs[1].equals("X")));
+            } else if (inputs[0].equals("D")) {
+                tasks.add(new Deadline(inputs[2], Parser.parseDate(inputs[3]), inputs[1].equals("X")));
+            } else if (inputs[0].equals("E")) {
+                tasks.add(new Event(inputs[2], Parser.parseDate(inputs[3]), Parser.parseDate(inputs[4]),
+                        inputs[1].equals("X")));
             }
-            BufferedReader reader = new BufferedReader(new FileReader(filePath.toString()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] inputs = line.split(" \\| ");
-                if (inputs[0].equals("T")) {
-                    tasks.add(new ToDo(inputs[2], inputs[1].equals("X")));
-                } else if (inputs[0].equals("D")) {
-                    tasks.add(new Deadline(inputs[2], Parser.parseDate(inputs[3]), inputs[1].equals("X")));
-                } else if (inputs[0].equals("E")) {
-                    tasks.add(new Event(inputs[2], Parser.parseDate(inputs[3]), Parser.parseDate(inputs[4]),
-                            inputs[1].equals("X")));
-                }
-            }
-        } catch (DevinException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
         }
         return tasks;
     }
@@ -70,15 +66,12 @@ public class Storage {
      *
      * @param tasks task list.
      */
-    public void editFile(ArrayList<Task> tasks) {
-        try (FileWriter writer = new FileWriter(filePath.toString())) {
-            for (Task task : tasks) {
-                writer.write(task.toFileString() + "\n");
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
+    public void editFile(ArrayList<Task> tasks) throws IOException {
+        FileWriter writer = new FileWriter(filePath.toString());
+        for (Task task : tasks) {
+            writer.write(task.toFileString() + "\n");
         }
+        writer.close();
     }
 
     /**
@@ -86,11 +79,10 @@ public class Storage {
      *
      * @param taskName task detail.
      */
-    public void appendTask(String taskName) {
-        try (FileWriter writer = new FileWriter(filePath.toString(), true)) {
-            writer.write(taskName + "\n");
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
-        }
+    public void appendTask(String taskName) throws IOException {
+        FileWriter writer = new FileWriter(filePath.toString(), true);
+        writer.write(taskName + "\n");
+        writer.close();
+
     }
 }

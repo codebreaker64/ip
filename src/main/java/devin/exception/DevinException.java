@@ -1,5 +1,8 @@
 package devin.exception;
 
+/**
+ * Representation of devin exception.
+ */
 //Solution inspired by https://www.geeksforgeeks.org/user-defined-custom-exception-in-java/
 public class DevinException extends Exception {
 
