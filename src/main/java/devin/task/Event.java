@@ -28,6 +28,16 @@ public class Event extends Task {
     }
 
     @Override
+    public LocalDateTime getStartTime() {
+        return from;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return to;
+    }
+
+    @Override
     public String toFileString() {
         return "E | " + super.toFileString() + " | " + from.format(FORMATTER1) + " | " + to.format(FORMATTER1);
     }
@@ -36,4 +46,5 @@ public class Event extends Task {
     public String toString() {
         return "[E]" + super.toString() + " (from: " + from.format(FORMATTER2) + " to: " + to.format(FORMATTER2) + ")";
     }
+    
 }

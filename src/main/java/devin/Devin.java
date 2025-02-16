@@ -53,6 +53,7 @@ public class Devin {
         case "deadline" -> Command.deadlineCommand(list, texts, storage);
         case "event" -> Command.eventCommand(list, texts, storage);
         case "find" -> Command.findCommand(list, texts);
+        case "schedule" -> Command.scheduleCommand(list);
         default -> throw new DevinException("""
                 Unknown command.
                 Please choose one of the following commands:
