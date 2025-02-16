@@ -29,7 +29,9 @@ public class Storage {
      */
     public Storage(Path filePath) {
         this.filePath = filePath;
+        assert filePath != null: "There is no file path.";
         this.parentDir = filePath.getParent();
+        assert parentDir != null: "There is no parent directory.";
     }
 
     /**

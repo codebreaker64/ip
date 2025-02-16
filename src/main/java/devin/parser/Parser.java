@@ -34,6 +34,7 @@ public class Parser {
      * @return the converted input.
      */
     public static LocalDateTime parseDate(String input) {
+        assert isValidDate(input): "Invalid date.";
         return LocalDateTime.parse(input, FORMATTER);
     }
 

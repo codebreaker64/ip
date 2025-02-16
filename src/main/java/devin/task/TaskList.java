@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import devin.Devin;
 import devin.exception.DevinException;
@@ -36,6 +37,7 @@ public class TaskList {
     public void addTask(Devin.Type type, String input, Storage storage) throws DevinException, IOException {
         Task task;
         String[] temp = Parser.parseInput(type, input);
+        assert temp.length > 0: "There should be at least one task.";
         switch (type) {
         case todo:
             if (input.trim().isEmpty()) {
@@ -66,6 +68,7 @@ public class TaskList {
         for (int i = 0; i < tasks.size(); i++) {
             out.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
         }
+        assert !out.isEmpty() : "There is nothing in out." ;
         return out.toString();
     }
 
@@ -102,22 +105,19 @@ public class TaskList {
      * @param keyword keyword to filter the task list.
      */
     public String findTask(String keyword) {
-        StringBuilder out = new StringBuilder("Here are the matching tasks in your listTasks:");
-        int i = 1;
-        for (Task task : tasks) {
-            String taskName = task.name.toLowerCase();
-            String keywordLower = keyword.trim().toLowerCase();
-
-            String regex = "\\b" + Pattern.quote(keywordLower) + "\\b";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(taskName);
-
-            if (matcher.find()) {
-                out.append(i).append(".").append(task.toString()).append("\n");
-                i++;
-            }
-        }
-        return out.toString();
+        StringBuilder out = new StringBuilder("Here are the matching tasks in your Task lists:\n");
+        String result = tasks.stream()
+                .filter(task -> {
+                    String taskName = task.name.toLowerCase();
+                    String keywordLower = keyword.trim().toLowerCase();
+                    String regex = "\\b" + Pattern.quote(keywordLower) + "\\b";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(taskName);
+                    return matcher.find();
+                })
+                .map(task -> task.toString())
+                .collect(Collectors.joining("\n", out.toString(), ""));
+        return result;
     }
 
     /**
