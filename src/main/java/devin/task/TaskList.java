@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import devin.Devin;
 import devin.exception.DevinException;
@@ -17,7 +18,7 @@ public class TaskList {
     private ArrayList<Task> tasks;
 
     /**
-     * Constructs a new instance of Tasklist with the specified store.
+     * Constructs a new instance of TaskList with the specified store.
      *
      * @param tasks task list retrieved from storage file.
      */
@@ -35,33 +36,28 @@ public class TaskList {
      */
     public void addTask(Devin.Type type, String input, Storage storage) throws DevinException, IOException {
         Task task;
-        String[] temp = null;
+        String[] temp = Parser.parseInput(type, input);
+        assert temp.length > 0: "There should be at least one task.";
         switch (type) {
         case todo:
             if (input.trim().isEmpty()) {
                 throw new DevinException("Oi! The description of a todo cannot be empty");
             }
             task = new ToDo(input.trim(), false);
-            tasks.add(task);
-            storage.appendTask(task.toFileString());
             break;
         case deadline:
-            temp = Parser.parseInput(type, input);
             task = new Deadline(temp[0].trim(), Parser.parseDate(temp[1].trim()), false);
-            tasks.add(task);
-            storage.appendTask(task.toFileString());
             break;
         case event:
-            temp = Parser.parseInput(type, input);
             task = new Event(temp[0].trim(), Parser.parseDate(temp[1].trim()),
                     Parser.parseDate(temp[2].trim()), false);
-            tasks.add(task);
-            storage.appendTask(task.toFileString());
             break;
         default:
             throw new DevinException("Invalid task type");
             //Fallthrough
         }
+        tasks.add(task);
+        storage.appendTask(task.toFileString());
     }
 
     /**
@@ -72,6 +68,7 @@ public class TaskList {
         for (int i = 0; i < tasks.size(); i++) {
             out.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
         }
+        assert !out.isEmpty() : "There is nothing in out." ;
         return out.toString();
     }
 
@@ -85,7 +82,7 @@ public class TaskList {
     }
 
     /**
-     * Unmarks the specified task number as incompleted.
+     * Unmarks the specified task number as uncompleted.
      *
      * @param index task number.
      */
@@ -108,29 +105,25 @@ public class TaskList {
      * @param keyword keyword to filter the task list.
      */
     public String findTask(String keyword) {
-        StringBuilder out = new StringBuilder("Here are the matching tasks in your listTasks:");
-        int i = 1;
-        for (Task task : tasks) {
-            String taskName = task.name.toLowerCase();
-            String keywordLower = keyword.trim().toLowerCase();
-
-
-            String regex = "\\b" + Pattern.quote(keywordLower) + "\\b";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(taskName);
-
-            if (matcher.find()) {
-                out.append(i).append(".").append(task.toString()).append("\n");
-                i++;
-            }
-        }
-        return out.toString();
+        StringBuilder out = new StringBuilder("Here are the matching tasks in your Task lists:\n");
+        String result = tasks.stream()
+                .filter(task -> {
+                    String taskName = task.name.toLowerCase();
+                    String keywordLower = keyword.trim().toLowerCase();
+                    String regex = "\\b" + Pattern.quote(keywordLower) + "\\b";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(taskName);
+                    return matcher.find();
+                })
+                .map(task -> task.toString())
+                .collect(Collectors.joining("\n", out.toString(), ""));
+        return result;
     }
 
     /**
      * Get the task list.
      *
-     * @return tasklist
+     * @return TaskList
      */
     public ArrayList<Task> getTasks() {
         return tasks;

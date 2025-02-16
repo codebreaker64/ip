@@ -20,15 +20,6 @@ public class Ui {
     }
 
     /**
-     * Prints out the input.
-     *
-     * @param input user input text.
-     */
-    public static String printEcho(String input) {
-        return input;
-    }
-
-    /**
      * Prints out the mark message with the specified task description.
      *
      * @param taskName task description.
