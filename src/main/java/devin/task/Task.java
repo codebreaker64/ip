@@ -1,5 +1,7 @@
 package devin.task;
 
+import java.time.LocalDateTime;
+
 /**
  * Representation of a Task.
  */
@@ -49,6 +51,14 @@ public class Task {
     public void unmarkTask() {
         this.isDone = false;
     }
+    
+    public LocalDateTime getStartTime() {
+        return null;
+    }
+    
+    public LocalDateTime getEndTime() {
+        return null;
+    }
 
     public String toFileString() {
         return getStatusIcon() + " | " + this.name;
@@ -58,4 +68,6 @@ public class Task {
     public String toString() {
         return "[" + getStatusIcon() + "] " + this.name;
     }
+    
+    
 }
