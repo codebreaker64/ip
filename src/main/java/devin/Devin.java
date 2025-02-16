@@ -36,6 +36,7 @@ public class Devin {
 
     public String getResponse(String text) throws DevinException, IOException {
         String[] texts = Parser.parseCommand(text);
+        assert texts.length > 0: "There should be at least one command.";
         int index;
         switch (texts[0]) {
         case "bye":
@@ -82,6 +83,7 @@ public class Devin {
                         + list.getTasks().size());
             }
             Task temp = list.getTasks().get(index);
+            assert temp != null: "The list does not contain this task.";
             list.deleteTask(index);
             storage.editFile(list.getTasks());
             return Ui.printDelete(temp.toString(), list.getTasks().size());
