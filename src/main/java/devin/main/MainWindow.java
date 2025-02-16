@@ -62,7 +62,9 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         try {
             String input = userInput.getText();
+            assert input != null: "There is no user input.";
             String response = devin.getResponse(input);
+            assert response != null: "There is no response.";
             dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getDevinDialog(response, devinImage)

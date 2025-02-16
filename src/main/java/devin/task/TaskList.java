@@ -35,7 +35,8 @@ public class TaskList {
      */
     public void addTask(Devin.Type type, String input, Storage storage) throws DevinException, IOException {
         Task task;
-        String[] temp = null;
+        String[] temp = Parser.parseInput(type, input);
+        assert temp.length > 0: "There should be at least one task.";
         switch (type) {
         case todo:
             if (input.trim().isEmpty()) {
@@ -46,13 +47,11 @@ public class TaskList {
             storage.appendTask(task.toFileString());
             break;
         case deadline:
-            temp = Parser.parseInput(type, input);
             task = new Deadline(temp[0].trim(), Parser.parseDate(temp[1].trim()), false);
             tasks.add(task);
             storage.appendTask(task.toFileString());
             break;
         case event:
-            temp = Parser.parseInput(type, input);
             task = new Event(temp[0].trim(), Parser.parseDate(temp[1].trim()),
                     Parser.parseDate(temp[2].trim()), false);
             tasks.add(task);
@@ -72,6 +71,7 @@ public class TaskList {
         for (int i = 0; i < tasks.size(); i++) {
             out.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
         }
+        assert !out.isEmpty() : "There is nothing in out." ;
         return out.toString();
     }
 
@@ -113,8 +113,7 @@ public class TaskList {
         for (Task task : tasks) {
             String taskName = task.name.toLowerCase();
             String keywordLower = keyword.trim().toLowerCase();
-
-
+            
             String regex = "\\b" + Pattern.quote(keywordLower) + "\\b";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(taskName);
@@ -124,6 +123,7 @@ public class TaskList {
                 i++;
             }
         }
+        assert !out.isEmpty(): "There is nothing in out.";
         return out.toString();
     }
 
