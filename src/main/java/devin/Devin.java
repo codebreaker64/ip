@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import devin.command.Command;
 import devin.exception.DevinException;
 import devin.parser.Parser;
 import devin.storage.Storage;
-import devin.task.Task;
 import devin.task.TaskList;
-import devin.ui.Ui;
 
 /**
  * Representation of Devin.
@@ -34,82 +33,39 @@ public class Devin {
         list = new TaskList(storage.retrieveTasks());
     }
 
+    /**
+     * Get response for the GUI based on the command user has given.
+     *
+     * @param text inputted by user.
+     * @return a message based on command user has given.
+     * @throws DevinException if there is any error regarding user input.
+     * @throws IOException if there is any error regarding.
+     */
     public String getResponse(String text) throws DevinException, IOException {
         String[] texts = Parser.parseCommand(text);
-        assert texts.length > 0: "There should be at least one command.";
-        int index;
-        switch (texts[0]) {
-        case "bye":
-            return Ui.printExit();
-        case "list":
-            return list.listTasks();
-        case "mark":
-            if (list.getTasks().isEmpty()) {
-                throw new DevinException("There is no task in the list!");
-            } else if (texts.length != 2) {
-                throw new DevinException("Please choose a task number");
-            }
-            index = Integer.parseInt((texts[1])) - 1;
-            if (index > list.getTasks().size() + 1 || index < 0) {
-                throw new DevinException("Please choose a valid task number from 1 to "
-                        + list.getTasks().size());
-            }
-            list.handleMark(index);
-            storage.editFile(list.getTasks());
-            return Ui.printMark(list.getTasks().get(index).toString());
-        case "unmark":
-            if (list.getTasks().isEmpty()) {
-                throw new DevinException("There is no task in the list!");
-            } else if (texts.length != 2) {
-                throw new DevinException("Please type a choose a task number");
-            }
-            index = Integer.parseInt((texts[1])) - 1;
-            if (index > list.getTasks().size() + 1 || index < 0) {
-                throw new DevinException("Please choose a valid task number from 1 to "
-                        + list.getTasks().size());
-            }
-            list.handleUnmark(index);
-            storage.editFile(list.getTasks());
-            return Ui.printUnmark(list.getTasks().get(index).toString());
-        case "delete":
-            if (list.getTasks().isEmpty()) {
-                throw new DevinException("There is no task in the list!");
-            } else if (texts.length != 2) {
-                throw new DevinException("Please type a choose a task number");
-            }
-            index = Integer.parseInt((texts[1])) - 1;
-            if (index > list.getTasks().size() + 1 || index < 0) {
-                throw new DevinException("Please choose a valid task number from 1 to "
-                        + list.getTasks().size());
-            }
-            Task temp = list.getTasks().get(index);
-            assert temp != null: "The list does not contain this task.";
-            list.deleteTask(index);
-            storage.editFile(list.getTasks());
-            return Ui.printDelete(temp.toString(), list.getTasks().size());
-        case "todo":
-            texts[0] = "";
-            list.addTask(Devin.Type.todo, String.join(" ", texts), storage);
-            return Ui.printAdd(list.getTasks().get(list.getTasks().size() - 1).toString(), list.getTasks().size());
-        case "deadline":
-            texts[0] = "";
-            list.addTask(Devin.Type.deadline, String.join(" ", texts), storage);
-            return Ui.printAdd(list.getTasks().get(list.getTasks().size() - 1).toString(), list.getTasks().size());
-        case "event":
-            texts[0] = "";
-            list.addTask(Devin.Type.event, String.join(" ", texts), storage);
-            return Ui.printAdd(list.getTasks().get(list.getTasks().size() - 1).toString(), list.getTasks().size());
-        case "find":
-            if (list.getTasks().isEmpty()) {
-                throw new DevinException("There is no task in the list!");
-            } else if (texts.length == 1) {
-                throw new DevinException("Please type in a keyword");
-            }
-            texts[0] = "";
-            return list.findTask(String.join(" ", texts));
-        default:
-            throw new DevinException("Unknown command");
-        }
+        return switch (texts[0]) {
+        case "bye" -> Command.byeCommand();
+        case "list" -> Command.listCommand(list);
+        case "mark" -> Command.markCommand(list, texts, storage);
+        case "unmark" -> Command.unmarkCommand(list, texts, storage);
+        case "delete" -> Command.deleteCommand(list, texts, storage);
+        case "todo" -> Command.todoCommand(list, texts, storage);
+        case "deadline" -> Command.deadlineCommand(list, texts, storage);
+        case "event" -> Command.eventCommand(list, texts, storage);
+        case "find" -> Command.findCommand(list, texts);
+        default -> throw new DevinException("""
+                Unknown command.
+                Please choose one of the following commands:
+                bye
+                list
+                mark
+                unmark
+                delete
+                todo
+                deadline
+                event
+                find""");
+        };
     }
 
 }
