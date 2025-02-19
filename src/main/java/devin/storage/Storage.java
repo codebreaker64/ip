@@ -32,6 +32,9 @@ public class Storage {
         assert filePath != null : "There is no file path.";
         this.parentDir = filePath.getParent();
         assert parentDir != null : "There is no parent directory.";
+
+        createDirectoryIfNotExists();
+        createFileIfNotExists();
     }
 
     /**
@@ -86,5 +89,31 @@ public class Storage {
         writer.write(taskName + "\n");
         writer.close();
 
+    }
+
+    /**
+     * Creates the parent directory if it doesn't exist.
+     */
+    private void createDirectoryIfNotExists() {
+        if (!Files.exists(parentDir)) {
+            try {
+                Files.createDirectories(parentDir);
+            } catch (IOException e) {
+                System.err.println("Error creating directory: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Creates the storage file if it doesn't exist.
+     */
+    private void createFileIfNotExists() {
+        if (!Files.exists(filePath)) {
+            try {
+                Files.createFile(filePath);
+            } catch (IOException e) {
+                System.err.println("Error creating file: " + e.getMessage());
+            }
+        }
     }
 }

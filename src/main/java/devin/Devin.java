@@ -15,7 +15,7 @@ import devin.task.TaskList;
  */
 public class Devin {
 
-    private static final Path FILEPATH = Paths.get("src/main/java/data/devin.txt");
+    private static final Path FILEPATH = Paths.get("data/devin.txt");
     private static Storage storage;
     private static TaskList list;
 

@@ -1,23 +1,28 @@
 package devin;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import java.nio.file.*;
-import java.io.IOException;
-import static org.junit.jupiter.api.Assertions.*;
 
 import devin.exception.DevinException;
 import devin.parser.Parser;
 import devin.storage.Storage;
 
 public class DevinTest {
-    private Storage storage;
 
     @TempDir
     Path tempDir;
 
     private Path tempFile;
+    private Storage storage;
 
     @BeforeEach
     public void setUp() throws IOException {
