@@ -26,7 +26,7 @@ public class Deadline extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
-        return by; 
+        return by;
     }
 
     @Override

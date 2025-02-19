@@ -37,7 +37,6 @@ public class MainWindow extends AnchorPane {
 
     private AudioClip sendSound = new AudioClip(this.getClass().getResource("/sounds/Send.wav").toString());
     private AudioClip responseSound = new AudioClip(this.getClass().getResource("/sounds/Notification.wav").toString());
-    
     /**
      * Methods to start when the app first initialise
      */
@@ -68,9 +67,9 @@ public class MainWindow extends AnchorPane {
         try {
             sendSound.play(1.0);
             String input = userInput.getText();
-            assert input != null: "There is no user input.";
+            assert input != null : "There is no user input.";
             String response = devin.getResponse(input);
-            assert response != null: "There is no response.";
+            assert response != null : "There is no response.";
             dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getDevinDialog(response, devinImage)

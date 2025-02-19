@@ -66,7 +66,6 @@ public class Devin {
                 - `event` \s
                 - `find` \s
                 - `schedule` \s
-                
                 Try one of these!""");
         };
     }

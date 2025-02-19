@@ -56,5 +56,4 @@ public class Ui {
     public static String printAdd(String taskName, int size) {
         return "Task added successfully:\n  " + taskName + "\nYou now have " + size + " tasks in your list.";
     }
-
 }

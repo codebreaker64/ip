@@ -1,9 +1,6 @@
 package devin.command;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import devin.Devin;
 import devin.exception.DevinException;
@@ -189,7 +186,7 @@ public class Command {
 
     /**
      * A schedule command to find all free time slot and display it to user.
-     * 
+     *
      * @param list of all tasks.
      * @return a message showing all free time slot.
      */

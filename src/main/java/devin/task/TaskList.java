@@ -1,11 +1,9 @@
 package devin.task;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +40,7 @@ public class TaskList {
     public void addTask(Devin.Type type, String input, Storage storage) throws DevinException, IOException {
         Task task;
         String[] temp = Parser.parseInput(type, input);
-        assert temp.length > 0: "There should be at least one task.";
+        assert temp.length > 0 : "There should be at least one task.";
         switch (type) {
         case todo:
             if (input.trim().isEmpty()) {
@@ -73,7 +71,7 @@ public class TaskList {
         for (int i = 0; i < tasks.size(); i++) {
             out.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
         }
-        assert !out.isEmpty() : "There is nothing in out." ;
+        assert !out.isEmpty() : "There is nothing in out.";
         return out.toString();
     }
 
@@ -136,22 +134,18 @@ public class TaskList {
 
     /**
      * Find all the free time slot that the user can schedule.
-     * 
+     *
      * @return a message of all free time slot
      */
     public String getTimedTasks() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-        
         LocalDateTime now = LocalDateTime.now();
-        
         ArrayList<Task> timedTasks = tasks.stream()
                 .filter(task -> task.getStartTime() != null && task.getEndTime() != null)
                 .sorted(Comparator.comparing(Task::getStartTime))
                 .collect(Collectors.toCollection(ArrayList::new));
-        
         StringBuilder freeSlots = new StringBuilder();
         LocalDateTime previousEndTime = now;
-
         for (Task task : timedTasks) {
             if (previousEndTime.isBefore(task.getStartTime())) {
                 freeSlots.append("Free slot from ")
@@ -162,12 +156,10 @@ public class TaskList {
             }
             previousEndTime = task.getEndTime();
         }
-        
         freeSlots.append("Free slot from ")
                 .append(previousEndTime.format(formatter))
                 .append(" to forever")
-                .append("\n"); 
-
+                .append("\n");
         return freeSlots.toString().trim();
     }
 }
