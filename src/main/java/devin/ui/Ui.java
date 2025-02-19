@@ -9,14 +9,14 @@ public class Ui {
      * Prints the greeting message.
      */
     public static String printGreet() {
-        return "Hello! I'm, Devin\nWhat can I do for you?";
+        return "Hello! I'm Devin, your AI assistant. How can I assist you today?";
     }
 
     /**
      * Prints the exit message.
      */
     public static String printExit() {
-        return "Bye. Hope to see you again soon!";
+        return "Goodbye! Feel free to return whenever you need assistance.";
     }
 
     /**
@@ -25,7 +25,7 @@ public class Ui {
      * @param taskName task description.
      */
     public static String printMark(String taskName) {
-        return "Nice! I've marked this task as done:\n " + taskName;
+        return "Task marked as completed:\n  " + taskName + "\nGreat work!";
     }
 
     /**
@@ -34,7 +34,7 @@ public class Ui {
      * @param taskName task description.
      */
     public static String printUnmark(String taskName) {
-        return "OK, I've marked this task as not done yet:\n  " + taskName;
+        return "Task marked as not completed:\n  " + taskName + "\nLet me know if you need further adjustments.";
     }
 
     /**
@@ -44,7 +44,7 @@ public class Ui {
      * @param size task list size.
      */
     public static String printDelete(String temp, int size) {
-        return "Noted. I've removed this task:\n  " + temp + "\nNow you have " + size + " tasks in the list.";
+        return "Task removed successfully:\n  " + temp + "\nYou now have " + size + " tasks remaining.";
     }
 
     /**
@@ -54,7 +54,7 @@ public class Ui {
      * @param size     task list size.
      */
     public static String printAdd(String taskName, int size) {
-        return "Got it. I've added this task:\n  " + taskName + "\nNow you have " + size + " tasks in the list.";
+        return "Task added successfully:\n  " + taskName + "\nYou now have " + size + " tasks in your list.";
     }
 
 }

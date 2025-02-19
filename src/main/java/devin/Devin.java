@@ -55,17 +55,19 @@ public class Devin {
         case "find" -> Command.findCommand(list, texts);
         case "schedule" -> Command.scheduleCommand(list);
         default -> throw new DevinException("""
-                Unknown command.
-                Please choose one of the following commands:
-                bye
-                list
-                mark
-                unmark
-                delete
-                todo
-                deadline
-                event
-                find""");
+                I'm sorry, but I didn't catch that. Here are the commands I understand: \s
+                - `bye` \s
+                - `list` \s
+                - `mark` \s
+                - `unmark` \s
+                - `delete` \s
+                - `todo` \s
+                - `deadline` \s
+                - `event` \s
+                - `find` \s
+                - `schedule` \s
+                
+                Try one of these!""");
         };
     }
 
