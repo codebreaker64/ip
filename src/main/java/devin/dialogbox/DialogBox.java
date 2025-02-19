@@ -47,11 +47,12 @@ public class DialogBox extends HBox {
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
-        dialog.getStyleClass().add("reply-label");
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        var db = new DialogBox(text, img);
+        db.dialog.getStyleClass().add("user-label");
+        return db;
     }
 
     public static DialogBox getDevinDialog(String text, Image img) {

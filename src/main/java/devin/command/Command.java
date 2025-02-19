@@ -78,7 +78,7 @@ public class Command {
         if (list.getTasks().isEmpty()) {
             throw new DevinException("There is no task in the list!");
         } else if (texts.length != 2) {
-            throw new DevinException("Please type a choose a task number");
+            throw new DevinException("Please choose a task number");
         }
         int index = Integer.parseInt((texts[1])) - 1;
         if (index > list.getTasks().size() + 1 || index < 0) {
@@ -105,7 +105,7 @@ public class Command {
         if (list.getTasks().isEmpty()) {
             throw new DevinException("There is no task in the list!");
         } else if (texts.length != 2) {
-            throw new DevinException("Please type a choose a task number");
+            throw new DevinException("Please choose a task number");
         }
         int index = Integer.parseInt((texts[1])) - 1;
         if (index > list.getTasks().size() + 1 || index < 0) {
