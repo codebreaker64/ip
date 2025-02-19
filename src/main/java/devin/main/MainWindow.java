@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 /**
  * Controller for the main GUI.
@@ -31,9 +32,12 @@ public class MainWindow extends AnchorPane {
 
     private Devin devin;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.jpg"));
-    private Image devinImage = new Image(this.getClass().getResourceAsStream("/images/DaDevin.jpg"));
+    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
+    private Image devinImage = new Image(this.getClass().getResourceAsStream("/images/DaDevin.png"));
 
+    private AudioClip sendSound = new AudioClip(this.getClass().getResource("/sounds/Send.wav").toString());
+    private AudioClip responseSound = new AudioClip(this.getClass().getResource("/sounds/Notification.wav").toString());
+    
     /**
      * Methods to start when the app first initialise
      */
@@ -43,6 +47,7 @@ public class MainWindow extends AnchorPane {
             scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
             Devin.main(null);
             dialogContainer.getChildren().add(DialogBox.getDevinDialog(Ui.printGreet(), devinImage));
+            responseSound.play(1.0);
             userInput.setPromptText("Type here...");
         } catch (DevinException | IOException e) {
             handleException(e.getMessage());
@@ -61,6 +66,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         try {
+            sendSound.play(1.0);
             String input = userInput.getText();
             assert input != null: "There is no user input.";
             String response = devin.getResponse(input);
@@ -69,6 +75,7 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getDevinDialog(response, devinImage)
             );
+            responseSound.play(1.0);
             userInput.clear();
             //Solution inspired by ypuppy at https://github.com/nus-cs2103-AY2425S2/forum/issues/160
             if (input.contains("bye")) {

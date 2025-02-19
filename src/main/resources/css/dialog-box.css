@@ -1,9 +1,17 @@
+.user-label {
+    -fx-background-color: #A47EC6 !important; 
+    -fx-text-fill: #FFFFFF; /* White text for readability */
+    -fx-background-radius: 1em;  /* Uniform rounded corners */
+    -fx-padding: 10px; /* Add some padding for better spacing */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.5, 2, 2); /* A bit less intense shadow */
+}
+
 .label {
-    -fx-background-color: linear-gradient(to bottom right, #00ffbf, #00ddff);
-    -fx-border-color: #d55e00 #009e73 #cc79a7 #0072b2;
-    -fx-border-width: 2px;
-    -fx-background-radius: 1em 1em 0 1em;
-    -fx-border-radius: 1em 1em 0 1em;
+    -fx-background-color: #6495ED;
+    -fx-text-fill: #FFFFFF; /* White text for readability */
+    -fx-background-radius: 1em;  /* Uniform rounded corners */
+    -fx-padding: 10px; /* Add some padding for better spacing */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.5, 2, 2); /* A bit less intense shadow */
 }
 
 .reply-label {
@@ -22,4 +30,3 @@
     /* Rotate image clockwise by degrees. */
     -fx-rotate: 0;
 }
-
