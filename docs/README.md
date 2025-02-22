@@ -17,7 +17,27 @@ Welcome to **Devin**, your personal chatbot for managing tasks efficiently. Devi
 1. Ensure you have **Java 17 or above** installed on your computer.
    **Mac users**: Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 3. Download the latest `.jar` file from [here](https://github.com/codebreaker64/devin/releases).
-4. Copy the file to the folder you want to use as the home folder for Devin.
+4. Move the downloaded `.jar` file to your preferred home folder for Devin.
+5. Run Devin using one of the following methods:
+
+    - **Double-click** the JAR file.
+
+   Or, use the terminal:
+
+    - Open the terminal/command prompt.
+    - Navigate to the folder where the JAR file is stored:
+
+      ```bash
+      cd /path/to/folder
+      ```
+
+    - Run the following command:
+
+      ```bash
+      java -jar Devin.jar
+      ```
+
+6. Once Devin starts, explore its features by entering commands. 🚀
 
 ## Features
 Devin supports a variety of commands to help you manage your schedule:
@@ -129,18 +149,18 @@ bye
   Do not modify the text file, move the folder, or relocate the JAR file, as this may cause data loss or corruption.
 
 ## Command Summary
-| Command | Format | Description |
-|---------|--------|-------------|
-| Add a To-Do | `todo <Description>` | Adds a simple task without a specific deadline. |
-| Add an Event | `event <Description> /from d/m/yyyy HHmm /to d/m/yyyy HHmm` | Adds an event with a start and end time. |
-| Add a Deadline | `deadline <Description> /by d/m/yyyy HHmm` | Adds a task with a specific due date and time. |
-| List Tasks | `list` | Displays all tasks currently stored. |
-| Mark Task as Completed | `mark <Index>` | Marks a task as completed. |
-| Unmark Task as Incomplete | `unmark <Index>` | Marks a task as not completed. |
-| Delete a Task | `delete <Index>` | Removes a task from the list. |
-| Find a Task | `find <Keyword>` | Searches for tasks that contain the given keyword. |
-| Find Free Time Slot | `schedule` | Finds the next available time slot in your schedule. |
-| Exit Devin | `bye` | Ends the program. |
+| Command                   | Format                                                      | Description                                          |
+|---------------------------|-------------------------------------------------------------|------------------------------------------------------|
+| Add a To-Do               | `todo <Description>`                                        | Adds a simple task without a specific deadline.      |
+| Add an Event              | `event <Description> /from d/m/yyyy HHmm /to d/m/yyyy HHmm` | Adds an event with a start and end time.             |
+| Add a Deadline            | `deadline <Description> /by d/m/yyyy HHmm`                  | Adds a task with a specific due date and time.       |
+| List Tasks                | `list`                                                      | Displays all tasks currently stored.                 |
+| Mark Task as Completed    | `mark <Index>`                                              | Marks a task as completed.                           |
+| Unmark Task as Incomplete | `unmark <Index>`                                            | Marks a task as not completed.                       |
+| Delete a Task             | `delete <Index>`                                            | Removes a task from the list.                        |
+| Find a Task               | `find <Keyword>`                                            | Searches for tasks that contain the given keyword.   |
+| Find Free Time Slot       | `schedule`                                                  | Finds the next available time slot in your schedule. |
+| Exit Devin                | `bye`                                                       | Ends the program.                                    |
 
 ## FAQ
 ### Q: What happens if I enter an invalid command?
@@ -156,5 +176,5 @@ A: Yes, tasks are saved automatically and will be available the next time you st
 A: No, the `find` command only supports searching by a single keyword.
 
 ## Acknowledgements
-- Inspired by Duke chatbot from [NUS SE-EDU](https://se-education.org/)
+- Inspired by Duke chatbot from [NUS SE-EDU](https://github.com/nus-cs2103-AY2425S2/ip)
 
