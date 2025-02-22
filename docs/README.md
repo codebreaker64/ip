@@ -149,6 +149,7 @@ bye
   Do not modify the text file, move the folder, or relocate the JAR file, as this may cause data loss or corruption.
 
 ## Command Summary
+
 | Command                   | Format                                                      | Description                                          |
 |---------------------------|-------------------------------------------------------------|------------------------------------------------------|
 | Add a To-Do               | `todo <Description>`                                        | Adds a simple task without a specific deadline.      |
