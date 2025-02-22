@@ -48,10 +48,10 @@ public class DevinTest {
 
     @Test
     public void parser_parseInput_success() throws DevinException {
-        String input = "meeting /from 2/2/2025 1000 /to 2/2/2025 1200";
+        String input = "meeting /from 2/10/2025 1000 /to 2/10/2025 1200";
         String expectedTaskName = "meeting";
-        String expectedFromDate = "2/2/2025 1000";
-        String expectedToDate = "2/2/2025 1200";
+        String expectedFromDate = "2/10/2025 1000";
+        String expectedToDate = "2/10/2025 1200";
 
         String[] parsedTask = Parser.parseInput(Devin.Type.event, input);
 
@@ -61,9 +61,9 @@ public class DevinTest {
         assertEquals(expectedFromDate, parsedTask[1].trim(), "From date was not parsed correctly");
         assertEquals(expectedToDate, parsedTask[2].trim(), "To date was not parsed correctly");
 
-        input = "return book /by 6/6/2025 1400";
+        input = "return book /by 6/10/2025 1400";
         expectedTaskName = "return book";
-        String expectedByDate = "6/6/2025 1400";
+        String expectedByDate = "6/10/2025 1400";
 
         parsedTask = Parser.parseInput(Devin.Type.deadline, input);
 
