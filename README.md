@@ -16,7 +16,7 @@ Welcome to **Devin**, your personal chatbot for managing tasks efficiently. Devi
 
 1. Ensure you have **Java 17 or above** installed on your computer.
    **Mac users**: Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
-3. Download the latest `.jar` file from [here](https://github.com/codebreaker64/devin/releases).
+3. Download the latest `.jar` file from [here](https://github.com/codebreaker64/ip/releases/download/A-Release/devin.jar).
 4. Move the downloaded `.jar` file to your preferred home folder for Devin.
 5. Run Devin using one of the following methods:
 
