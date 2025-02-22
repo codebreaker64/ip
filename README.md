@@ -4,9 +4,10 @@
 1. [Introduction](#introduction)
 2. [Quick Start](#quick-start)
 3. [Features](#features)
-4. [Command Summary](#command-summary)
-5. [FAQ](#faq)
-6. [Acknowledgements](#acknowledgements)
+4. [Important Note](#important-note)
+5. [Command Summary](#command-summary)
+6. [FAQ](#faq)
+7. [Acknowledgements](#acknowledgements)
 
 ## Introduction
 Welcome to **Devin**, your personal chatbot for managing tasks efficiently. Devin helps you track **to-dos, deadlines, events**, and more. This guide provides instructions on how to use Devin effectively.
@@ -120,6 +121,12 @@ Ends the program.
 ```
 bye
 ```
+
+## Important Note
+- All dates and times must be entered in the format `d/M/yyyy HHmm` (e.g., `15/2/2025 1400`).
+- Invalid date entries (e.g., `30/2/2025`) will result in an error.
+- Tasks are automatically saved in a text file within a dedicated folder located in the same directory as your JAR file.
+  Do not modify the text file, move the folder, or relocate the JAR file, as this may cause data loss or corruption.
 
 ## Command Summary
 | Command | Format | Description |
