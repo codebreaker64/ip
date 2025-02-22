@@ -30,15 +30,6 @@ public class Task {
     }
 
     /**
-     * Returns the task description.
-     *
-     * @return task description.
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
      * Marks the task as completed,
      */
     public void markTask() {

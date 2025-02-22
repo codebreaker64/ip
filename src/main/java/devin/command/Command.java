@@ -51,9 +51,12 @@ public class Command {
             throw new DevinException("Please choose a task number");
         }
         int index = Integer.parseInt((texts[1])) - 1;
-        if (index > list.getTasks().size() + 1 || index < 0) {
+        if (index > list.getTasks().size() - 1 || index < 0) {
             throw new DevinException("Please choose a valid task number from 1 to "
                     + list.getTasks().size());
+        }
+        if (list.getTasks().get(index).getStatusIcon().equals("X")) {
+            throw new DevinException("Task has already been marked!");
         }
         list.handleMark(index);
         storage.editFile(list.getTasks());
@@ -78,9 +81,12 @@ public class Command {
             throw new DevinException("Please choose a task number");
         }
         int index = Integer.parseInt((texts[1])) - 1;
-        if (index > list.getTasks().size() + 1 || index < 0) {
+        if (index > list.getTasks().size() - 1 || index < 0) {
             throw new DevinException("Please choose a valid task number from 1 to "
                     + list.getTasks().size());
+        }
+        if (list.getTasks().get(index).getStatusIcon().equals(" ")) {
+            throw new DevinException("Task has already been unmarked!");
         }
         list.handleUnmark(index);
         storage.editFile(list.getTasks());
@@ -105,7 +111,7 @@ public class Command {
             throw new DevinException("Please choose a task number");
         }
         int index = Integer.parseInt((texts[1])) - 1;
-        if (index > list.getTasks().size() + 1 || index < 0) {
+        if (index > list.getTasks().size() - 1 || index < 0) {
             throw new DevinException("Please choose a valid task number from 1 to "
                     + list.getTasks().size());
         }

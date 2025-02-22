@@ -3,6 +3,7 @@ package devin.parser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import devin.Devin;
 import devin.exception.DevinException;
@@ -11,7 +12,8 @@ import devin.exception.DevinException;
  * Representation of a parser.
  */
 public class Parser {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/uuuu HHmm")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     /**
      * Splits the user input text into a String array via spaces.
@@ -33,8 +35,12 @@ public class Parser {
      * @param input date and time
      * @return the converted input.
      */
-    public static LocalDateTime parseDate(String input) {
+    public static LocalDateTime parseDate(String input) throws DevinException {
         assert isValidDate(input) : "Invalid date.";
+        LocalDateTime date = LocalDateTime.parse(input, FORMATTER);
+        if (date.isBefore(LocalDateTime.now())) {
+            throw new DevinException("Please input date and time that is not in the past");
+        }
         return LocalDateTime.parse(input, FORMATTER);
     }
 
@@ -47,26 +53,39 @@ public class Parser {
      * @throws DevinException If input is empty or input is missing keywords.
      */
     public static String[] parseInput(devin.Devin.Type type, String input) throws DevinException {
-        if (input.trim().isEmpty()) {
-            throw new DevinException("Oi! The description of a " + type + " cannot be empty");
-        }
         String[] temps = null;
-        if (type == Devin.Type.deadline) {
+        if (type == Devin.Type.todo) {
+            if (input.trim().isEmpty()) {
+                throw new DevinException("Oi! The description of a " + type + " cannot be empty");
+            }
+        } else if (type == Devin.Type.deadline) {
             if (!input.contains("/by")) {
-                throw new DevinException("My god! please follow this format deadline task /by d/m/yyyy HHmm");
+                throw new DevinException("My god! please follow this format deadline description /by d/m/yyyy HHmm");
             }
             temps = input.trim().split("/by");
-            if (!isValidDate(temps[1].trim())) {
-                throw new DevinException("Date time format is incorrect. Please type in this format (d/M/yyyy HHmm)");
+            if (temps[0].trim().isEmpty()) {
+                throw new DevinException("Oi! The description of a " + type + " cannot be empty");
+            }
+            if (temps.length == 1 || !isValidDate(temps[1].trim())) {
+                throw new DevinException(
+                        "Date time is invalid. Please choose a valid date and type in this format (d/M/yyyy HHmm)");
             }
         } else if (type == Devin.Type.event) {
             if (!input.contains("/from") || !input.contains("/to")) {
                 throw new DevinException(
-                        "My god! please follow this format event task /from d/m/yyyy HHmm /to d/m/yyyy HHmm");
+                        "My god! please follow this format event description /from d/m/yyyy HHmm /to d/m/yyyy HHmm");
             }
             temps = input.split("/from | /to");
-            if (!isValidDate(temps[1].trim()) || !isValidDate(temps[2].trim())) {
-                throw new DevinException("Date time format is incorrect. Please type in this format (d/M/yyyy HHmm)");
+            if (temps[0].trim().isEmpty()) {
+                throw new DevinException("Oi! The description of a " + type + " cannot be empty");
+            }
+            if (temps.length == 1 || !isValidDate(temps[1].trim()) || !isValidDate(temps[2].trim())) {
+                throw new DevinException(
+                        "Date time is invalid. Please choose a valid date and type in this format (d/M/yyyy HHmm)");
+            }
+            if (LocalDateTime.parse(temps[1].trim(), FORMATTER).isAfter(LocalDateTime.parse(temps[2].trim(),
+                    FORMATTER))) {
+                throw new DevinException("/from date time should be before /to date time");
             }
         }
         return temps;
