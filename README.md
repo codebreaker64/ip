@@ -17,7 +17,27 @@ Welcome to **Devin**, your personal chatbot for managing tasks efficiently. Devi
 1. Ensure you have **Java 17 or above** installed on your computer.
    **Mac users**: Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 3. Download the latest `.jar` file from [here](https://github.com/codebreaker64/devin/releases).
-4. Copy the file to the folder you want to use as the home folder for Devin.
+4. Move the downloaded `.jar` file to your preferred home folder for Devin.
+5. Run Devin using one of the following methods:
+
+   - **Double-click** the JAR file.
+   
+   Or, use the terminal:
+   
+   - Open the terminal/command prompt.
+   - Navigate to the folder where the JAR file is stored:
+   
+     ```bash
+     cd /path/to/folder
+     ```
+
+   - Run the following command:
+   
+     ```bash
+     java -jar Devin.jar
+     ```
+
+6. Once Devin starts, explore its features by entering commands. 🚀
 
 ## Features
 Devin supports a variety of commands to help you manage your schedule:
@@ -156,5 +176,5 @@ A: Yes, tasks are saved automatically and will be available the next time you st
 A: No, the `find` command only supports searching by a single keyword.
 
 ## Acknowledgements
-- Inspired by Duke chatbot from [NUS SE-EDU](https://se-education.org/)
+- Inspired by Duke chatbot from [NUS SE-EDU](https://github.com/nus-cs2103-AY2425S2/ip)
 
